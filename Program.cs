@@ -9,8 +9,44 @@ class Program
         var array = GetRandomArray();
         ShowArray(array);
         Console.WriteLine($"Hello, World! ");
-        ShowArray(Selection_sort(array));
+        ShowArray(Fast_sort(array));
     }
+
+    /// <summary>
+    /// Быстрая сортировка
+    /// </summary>
+    /// <param name="array"></param>
+    /// <returns></returns>
+    static int[] Fast_sort(int[] array)
+    {
+        int pivot = array[array.Length/2];
+        int[] lessArray = new int[array.Length / 2];
+        int[] greaterArray = new int[array.Length / 2];
+        
+        if (array.Length < 2) return array;
+        else
+        {
+            for (int i = 0; i < array.Length - 1; i++)
+            {
+                if (array[i] < pivot)
+                {
+                    lessArray[i] = array[i];
+                }
+                else
+                {
+                    greaterArray[i] = array[i];
+                }
+            }
+        };
+        int[] newArray = new int[array.Length];
+        Array.Copy(Fast_sort(lessArray), 0, newArray, 0, array.Length);
+        Array.Copy(new[]{pivot}, 0, newArray, 0, array.Length);
+        Array.Copy(Fast_sort(greaterArray), 0, newArray, 0, array.Length);
+        
+        return newArray;    
+        return null; //Fast_sort(lessArray) + pivot + Fast_sort(greaterArray);
+    }
+    
 
     /// <summary>
     /// Пузырьковый поиск
@@ -97,11 +133,16 @@ class Program
         return array;
     }
 
+    /// <summary>
+    /// Показать массив
+    /// </summary>
+    /// <param name="array"></param>
     static void ShowArray(int[] array)
     {
         for (int i = 0; i < array.Length-1; i++)
         {
-            Console.WriteLine(array[i]);
+            Console.Write($"{array[i]} ");
         }
+        Console.WriteLine();
     } 
 }
