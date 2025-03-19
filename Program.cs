@@ -9,7 +9,7 @@ class Program
         var array = GetRandomArray();
         ShowArray(array);
         Console.WriteLine($"Hello, World! ");
-        ShowArray(Fast_sort(array));
+        ShowArray(Fast_sort(array, 0, array.Length - 1));
     }
 
     /// <summary>
@@ -17,34 +17,50 @@ class Program
     /// </summary>
     /// <param name="array"></param>
     /// <returns></returns>
-    static int[] Fast_sort(int[] array)
+    static int[] Fast_sort(int[] array, int minIndex, int maxIndex)
     {
-        int pivot = array[array.Length/2];
-        int[] lessArray = new int[array.Length / 2];
-        int[] greaterArray = new int[array.Length / 2];
-        
-        if (array.Length < 2) return array;
-        else
+        if (minIndex >= maxIndex)
         {
-            for (int i = 0; i < array.Length - 1; i++)
-            {
-                if (array[i] < pivot)
-                {
-                    lessArray[i] = array[i];
-                }
-                else
-                {
-                    greaterArray[i] = array[i];
-                }
-            }
-        };
-        int[] newArray = new int[array.Length];
-        Array.Copy(Fast_sort(lessArray), 0, newArray, 0, array.Length);
-        Array.Copy(new[]{pivot}, 0, newArray, 0, array.Length);
-        Array.Copy(Fast_sort(greaterArray), 0, newArray, 0, array.Length);
+            return array;
+        }
+
+        int pivot = GetPivotIndex(array, minIndex, maxIndex);
+
+        Fast_sort(array, minIndex, pivot -1);
         
-        return newArray;    
-        return null; //Fast_sort(lessArray) + pivot + Fast_sort(greaterArray);
+        Fast_sort(array, pivot + 1, maxIndex);
+         
+        return array;
+    }
+    
+    private static int GetPivotIndex(int[] array, int minIndex, int maxIndex)
+    {
+        int pivot = minIndex - 1;
+        int temp;
+
+        for (int i = minIndex; i <= maxIndex; i++)
+        {
+            if (array[i] < array[maxIndex])
+            {
+                pivot++;
+                
+                temp = array[pivot];
+
+                array[pivot] = array[i];
+
+                array[i] = temp;
+            }
+        }
+
+        pivot++;
+        
+        temp = array[pivot];
+
+        array[pivot] = array[maxIndex];
+
+        array[maxIndex] = temp;
+
+        return pivot;
     }
     
 
